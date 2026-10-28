@@ -19,4 +19,9 @@ jobs:
       - name: ML model Training
         run: python train.py
       - name: ML model Testing
-        run: python test.py 
+        run: python test.py
+      - name: Deploy to Render
+        if: success() && github.ref == 'ref/heads/main'
+        env:
+          DEPLOY_HOOK_URL: ${{secrets.RENDER_DEPLOY_HOOK_URL}}
+        run: curl --fail --silent --show-error "$DEPLOY_HOOK_URL"
